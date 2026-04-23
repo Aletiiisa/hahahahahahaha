@@ -77,7 +77,35 @@ button {
     position: absolute;
     left: 180px;
     top: 120px;
-    transition: all 0.3s ease; /* suavidad */
+    transition: all 0.3s ease;
+}
+
+/* pantalla SI */
+#loveScreen {
+    display: none;
+    color: white;
+    font-size: 2em;
+    text-align: center;
+}
+
+/* GALERIA */
+#gallery {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#gallery img {
+    width: 45%;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(255,255,255,0.3);
 }
 
 /* corazones */
@@ -109,49 +137,52 @@ button {
     </div>
 </div>
 
+<div id="loveScreen">
+    💘 Sabía que sí 😍💘
+</div>
+
+<div id="gallery">
+    <img src="foto1.jpeg">
+    <img src="foto2.jpeg">
+    <img src="foto3.jpeg">
+    <img src="foto4.jpeg">
+</div>
+
 <script>
 let yesBtn = document.getElementById("yes");
 let noBtn = document.getElementById("no");
 let intro = document.getElementById("intro");
 let main = document.getElementById("main");
+let loveScreen = document.getElementById("loveScreen");
+let gallery = document.getElementById("gallery");
 let card = document.getElementById("card");
 
 let scale = 1;
 
-/* frases troll */
-let frases = [
-    "¿seguro? 😢",
-    "piénsalo... 🥺",
-    "no seas así 😭",
-    "dale sí 😡",
-    "te conviene 😏",
-    "última chance 😤"
-];
-let i = 0;
-
-/* mostrar main */
+/* intro */
 setTimeout(() => {
     intro.style.display = "none";
     main.style.display = "block";
 }, 5000);
 
-/* mover con rebote */
+/* frases */
+let frases = ["¿seguro? 😢","piénsalo... 🥺","no seas así 😭","dale sí 😡"];
+let i = 0;
+
+/* mover NO */
 let posX = 150;
 let posY = 100;
 let velX = 2;
 let velY = 2;
 
 function moveNo() {
-    // cambiar texto
     noBtn.innerText = frases[i % frases.length];
     i++;
 
-    // aumentar SI
     scale += 0.15;
     yesBtn.style.transform = "scale(" + scale + ")";
 }
 
-/* animación continua tipo rebote */
 setInterval(() => {
     const maxX = card.clientWidth - noBtn.offsetWidth;
     const maxY = card.clientHeight - noBtn.offsetHeight;
@@ -166,13 +197,18 @@ setInterval(() => {
     noBtn.style.top = posY + "px";
 }, 20);
 
-/* detectar intento de tocar */
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-/* botón SI */
+/* CLICK SI */
 yesBtn.addEventListener("click", () => {
-    document.body.innerHTML = "<h1 style='color:white;'>Sabía que sí 😍💘</h1>";
+    main.style.display = "none";
+    loveScreen.style.display = "block";
+
+    setTimeout(() => {
+        loveScreen.style.display = "none";
+        gallery.style.display = "flex";
+    }, 3000);
 });
 
 /* corazones */
