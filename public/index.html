@@ -230,18 +230,23 @@ function showSlide(){
     text.innerText=fotos[index].text;
 }
 
-/* siguiente */
+/* siguiente (ARREGLADO) */
 nextBtn.addEventListener("click",()=>{
-    img.classList.add("small");
 
-    setTimeout(()=>{
-        text.classList.add("show");
-    },500);
+    if(!img.classList.contains("small")){
+        // primer click → animación
+        img.classList.add("small");
 
-    setTimeout(()=>{
+        setTimeout(()=>{
+            text.classList.add("show");
+        },500);
+
+    } else {
+        // segundo click → siguiente foto
         index++;
         showSlide();
-    },2500);
+    }
+
 });
 </script>
 
