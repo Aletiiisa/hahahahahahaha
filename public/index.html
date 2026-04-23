@@ -10,17 +10,17 @@ body {
     margin: 0;
     height: 100vh;
     font-family: Arial, sans-serif;
-    overflow: hidden;
     background: black;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
 }
 
 /* INTRO */
 #intro {
     position: absolute;
-    color: white;
     font-size: 2em;
     text-align: center;
     animation: fadeIn 2s ease, fadeOut 2s ease 2s forwards;
@@ -35,7 +35,6 @@ body {
     to {opacity: 0;}
 }
 
-/* MAIN */
 #main { display: none; }
 
 /* CARD */
@@ -43,90 +42,74 @@ body {
     background: white;
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    position: relative;
     width: 320px;
     height: 220px;
     text-align: center;
+    position: relative;
+    color: black;
 }
 
 h1 { color: #ff4d6d; }
 
-/* BOTONES */
 button {
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 10px 20px;
     border: none;
     border-radius: 10px;
     margin: 10px;
     cursor: pointer;
 }
 
-#yes {
-    background: #28a745;
-    color: white;
-    transition: transform 0.2s;
-}
-
+#yes { background: green; color: white; }
 #no {
-    background: #dc3545;
+    background: red;
     color: white;
     position: absolute;
     left: 150px;
-    top: 110px;
-    transition: all 0.25s ease;
+    top: 100px;
 }
 
-/* MENSAJE */
-#loveScreen {
+/* LOVE */
+#loveScreen { display: none; font-size: 2em; }
+
+/* SLIDES */
+#slides {
     display: none;
-    color: white;
-    font-size: 2em;
     text-align: center;
+    width: 90%;
 }
 
-/* SLIDESHOW */
-#slideshow {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+.slide-img {
+    width: 80%;
+    max-height: 60vh;
+    border-radius: 15px;
+    transition: all 1s ease;
 }
 
-.slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translateY(100%);
-    transition: transform 1s ease;
+.small {
+    width: 40%;
 }
 
-.slide.active {
-    transform: translateY(0);
+.text {
+    margin-top: 20px;
+    font-size: 1.1em;
+    opacity: 0;
+    transition: opacity 1s ease;
 }
 
-/* corazones */
-.heart {
-    position: absolute;
-    color: pink;
-    font-size: 20px;
-    animation: float 5s linear infinite;
-}
+.show { opacity: 1; }
 
-@keyframes float {
-    from {transform: translateY(100vh);}
-    to {transform: translateY(-10vh);}
+/* botón siguiente */
+#nextBtn {
+    margin-top: 20px;
+    background: #ff4d6d;
+    color: white;
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro">
-    💘 Te amo M' Negrita Hermsosha 💘
-</div>
+<div id="intro">💘 Te amo M' Negrita Hermsosha 💘</div>
 
 <div id="main">
     <div class="card" id="card">
@@ -136,101 +119,103 @@ button {
     </div>
 </div>
 
-<div id="loveScreen">
-    💘 Sabía que sí 😍💘
-</div>
+<div id="loveScreen">💘 Sabía que sí 😍💘</div>
 
-<!-- SLIDES -->
-<div id="slideshow">
-    <img src="foto1.jpeg" class="slide">
-    <img src="foto2.jpeg" class="slide">
-    <img src="foto3.jpeg" class="slide">
-    <img src="foto4.jpeg" class="slide">
+<div id="slides">
+    <img id="img" class="slide-img">
+    <div id="text" class="text"></div>
+    <button id="nextBtn">Siguiente ➡️</button>
 </div>
 
 <script>
-let yesBtn = document.getElementById("yes");
-let noBtn = document.getElementById("no");
 let intro = document.getElementById("intro");
 let main = document.getElementById("main");
-let loveScreen = document.getElementById("loveScreen");
-let slideshow = document.getElementById("slideshow");
+let love = document.getElementById("loveScreen");
+let slides = document.getElementById("slides");
+
+let yes = document.getElementById("yes");
+let no = document.getElementById("no");
 let card = document.getElementById("card");
 
-let scale = 1;
+let img = document.getElementById("img");
+let text = document.getElementById("text");
+let nextBtn = document.getElementById("nextBtn");
 
-/* INTRO */
-setTimeout(() => {
-    intro.style.display = "none";
-    main.style.display = "block";
-}, 3000);
+/* intro */
+setTimeout(()=>{
+    intro.style.display="none";
+    main.style.display="block";
+},3000);
 
-/* FRASES */
-let frases = ["¿seguro? 😢","piénsalo... 🥺","no seas así 😭","dale sí 😡"];
-let i = 0;
+/* NO se mueve */
+no.addEventListener("mouseover",()=>moveNo());
+no.addEventListener("touchstart",()=>moveNo());
 
-/* MOVIMIENTO NO */
-let posX = 150, posY = 100, velX = 2, velY = 2;
-
-function moveNo() {
-    noBtn.innerText = frases[i % frases.length];
-    i++;
-    scale += 0.15;
-    yesBtn.style.transform = "scale(" + scale + ")";
+function moveNo(){
+    const maxX=card.clientWidth-no.offsetWidth;
+    const maxY=card.clientHeight-no.offsetHeight;
+    no.style.left=Math.random()*maxX+"px";
+    no.style.top=Math.random()*maxY+"px";
 }
 
-setInterval(() => {
-    const maxX = card.clientWidth - noBtn.offsetWidth;
-    const maxY = card.clientHeight - noBtn.offsetHeight;
+/* DATOS */
+let fotos = [
+{
+src:"foto1.jpeg",
+text:"Esa fotito fue el 24 de diciembre... uno de mis días favoritos contigo negrita 💗"
+},
+{
+src:"foto2.jpeg",
+text:"Ese día de mi cumpleaños me hiciste sentir el hombre más afortunado 🥺💕"
+},
+{
+src:"foto3.jpeg",
+text:"Ese 14... tu carita con las flores fue lo más hermoso que vi 💜"
+},
+{
+src:"foto4.jpeg",
+text:"Y esta última... simplemente nosotros 💘"
+}
+];
 
-    posX += velX;
-    posY += velY;
+let index=0;
 
-    if (posX <= 0 || posX >= maxX) velX *= -1;
-    if (posY <= 0 || posY >= maxY) velY *= -1;
+/* SI */
+yes.addEventListener("click",()=>{
+    main.style.display="none";
+    love.style.display="block";
 
-    noBtn.style.left = posX + "px";
-    noBtn.style.top = posY + "px";
-}, 20);
-
-noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
-
-/* CLICK SI */
-yesBtn.addEventListener("click", () => {
-    main.style.display = "none";
-    loveScreen.style.display = "block";
-
-    setTimeout(() => {
-        loveScreen.style.display = "none";
-        startSlideshow();
-    }, 2500);
+    setTimeout(()=>{
+        love.style.display="none";
+        slides.style.display="block";
+        showSlide();
+    },2500);
 });
 
-/* SLIDESHOW */
-function startSlideshow() {
-    slideshow.style.display = "block";
-    let slides = document.querySelectorAll(".slide");
-    let index = 0;
+/* MOSTRAR */
+function showSlide(){
+    if(index>=fotos.length){
+        nextBtn.innerText="Final 💘";
+        return;
+    }
 
-    slides[index].classList.add("active");
+    img.classList.remove("small");
+    text.classList.remove("show");
 
-    setInterval(() => {
-        slides[index].classList.remove("active");
-        index = (index + 1) % slides.length;
-        slides[index].classList.add("active");
-    }, 2500);
+    img.src=fotos[index].src;
+    text.innerText=fotos[index].text;
 }
 
-/* CORAZONES */
-setInterval(() => {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 5000);
-}, 300);
+/* SIGUIENTE */
+nextBtn.addEventListener("click",()=>{
+    img.classList.add("small");
+    text.classList.add("show");
+
+    setTimeout(()=>{
+        index++;
+        showSlide();
+    },1200);
+});
 </script>
 
 </body>
