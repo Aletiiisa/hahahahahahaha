@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti 💘</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* INTRO */
+#intro {
+    position: absolute;
+    color: white;
+    font-size: 2em;
+    text-align: center;
+    animation: fadeIn 2s ease, fadeOut 2s ease 3s forwards;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.5);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+@keyframes fadeOut {
+    to {opacity: 0;}
+}
+
+/* MAIN */
+#main {
+    display: none;
+    text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+    color: #ff4d6d;
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+#yes {
+    background: #28a745;
+    color: white;
+}
+
+#no {
+    background: #dc3545;
+    color: white;
+    position: absolute;
+}
+
+/* corazones */
+.heart {
+    position: absolute;
+    color: pink;
+    font-size: 20px;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    from {transform: translateY(100vh);}
+    to {transform: translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+    💘 Te amo M' Negrita Hermsosha 💘
+</div>
+
+<!-- MAIN -->
+<div id="main">
+    <div class="card">
+        <h1>¿Me amas? 😳💖</h1>
+        <button id="yes">Sí 😍</button>
+        <button id="no">No 😢</button>
+    </div>
+</div>
+
+<script>
+let yesBtn = document.getElementById("yes");
+let noBtn = document.getElementById("no");
+let intro = document.getElementById("intro");
+let main = document.getElementById("main");
+
+let scale = 1;
+
+/* mostrar main después de intro */
+setTimeout(() => {
+    intro.style.display = "none";
+    main.style.display = "block";
+}, 5000);
+
+/* mover NO en celular y PC */
+function moveNo() {
+    noBtn.style.top = Math.random() * window.innerHeight + "px";
+    noBtn.style.left = Math.random() * window.innerWidth + "px";
+
+    scale += 0.2;
+    yesBtn.style.transform = "scale(" + scale + ")";
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+/* click SI */
+yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = "<h1 style='color:white;'>Sabía que sí 😍💘</h1>";
+});
+
+/* corazones flotando */
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}, 300);
+</script>
+
+</body>
+</html>
