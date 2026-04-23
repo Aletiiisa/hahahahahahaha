@@ -38,26 +38,32 @@ body {
 /* MAIN */
 #main {
     display: none;
-    text-align: center;
 }
 
+/* CARD */
 .card {
     background: white;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    width: 320px;
+    height: 220px;
+    text-align: center;
 }
 
 h1 {
     color: #ff4d6d;
 }
 
+/* BOTONES */
 button {
-    padding: 15px 25px;
-    font-size: 18px;
+    padding: 12px 20px;
+    font-size: 16px;
     border: none;
     border-radius: 10px;
     margin: 10px;
+    cursor: pointer;
 }
 
 #yes {
@@ -69,6 +75,9 @@ button {
     background: #dc3545;
     color: white;
     position: absolute;
+    left: 180px;
+    top: 120px;
+    transition: all 0.3s ease; /* suavidad */
 }
 
 /* corazones */
@@ -88,14 +97,12 @@ button {
 
 <body>
 
-<!-- INTRO -->
 <div id="intro">
     💘 Te amo M' Negrita Hermsosha 💘
 </div>
 
-<!-- MAIN -->
 <div id="main">
-    <div class="card">
+    <div class="card" id="card">
         <h1>¿Me amas? 😳💖</h1>
         <button id="yes">Sí 😍</button>
         <button id="no">No 😢</button>
@@ -107,33 +114,68 @@ let yesBtn = document.getElementById("yes");
 let noBtn = document.getElementById("no");
 let intro = document.getElementById("intro");
 let main = document.getElementById("main");
+let card = document.getElementById("card");
 
 let scale = 1;
 
-/* mostrar main después de intro */
+/* frases troll */
+let frases = [
+    "¿seguro? 😢",
+    "piénsalo... 🥺",
+    "no seas así 😭",
+    "dale sí 😡",
+    "te conviene 😏",
+    "última chance 😤"
+];
+let i = 0;
+
+/* mostrar main */
 setTimeout(() => {
     intro.style.display = "none";
     main.style.display = "block";
 }, 5000);
 
-/* mover NO en celular y PC */
-function moveNo() {
-    noBtn.style.top = Math.random() * window.innerHeight + "px";
-    noBtn.style.left = Math.random() * window.innerWidth + "px";
+/* mover con rebote */
+let posX = 150;
+let posY = 100;
+let velX = 2;
+let velY = 2;
 
-    scale += 0.2;
+function moveNo() {
+    // cambiar texto
+    noBtn.innerText = frases[i % frases.length];
+    i++;
+
+    // aumentar SI
+    scale += 0.15;
     yesBtn.style.transform = "scale(" + scale + ")";
 }
 
+/* animación continua tipo rebote */
+setInterval(() => {
+    const maxX = card.clientWidth - noBtn.offsetWidth;
+    const maxY = card.clientHeight - noBtn.offsetHeight;
+
+    posX += velX;
+    posY += velY;
+
+    if (posX <= 0 || posX >= maxX) velX *= -1;
+    if (posY <= 0 || posY >= maxY) velY *= -1;
+
+    noBtn.style.left = posX + "px";
+    noBtn.style.top = posY + "px";
+}, 20);
+
+/* detectar intento de tocar */
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-/* click SI */
+/* botón SI */
 yesBtn.addEventListener("click", () => {
     document.body.innerHTML = "<h1 style='color:white;'>Sabía que sí 😍💘</h1>";
 });
 
-/* corazones flotando */
+/* corazones */
 setInterval(() => {
     let heart = document.createElement("div");
     heart.className = "heart";
